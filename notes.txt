@@ -1,0 +1,23 @@
+Projet liste de livres  (penser à la réutilisabilité !)
+
+définir les composants : 
+
+	- titre principal
+ 	- les livres
+		- un livre
+		- un bouton
+	-Bouton (ajouter)
+
+Quel composant est le plus adapté pour contenir les données (states) ?
+
+les données doivent être au niveau le plus haut ici : soit dans l'App, soit dans les livres;
+ 
+
+
+
+
+
+
+
+
+

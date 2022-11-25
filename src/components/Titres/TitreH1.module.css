@@ -1,0 +1,8 @@
+.titreH1 {
+    font-family: 'Sigmar One', cursive;
+
+}
+
+.titreH1:hover {
+    color: orange !important;
+}
