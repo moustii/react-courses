@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Button from "../../components/Button/Button";
+import Livre from "./Livre/Livre";
 
 class Livres extends Component {
 
@@ -11,8 +11,18 @@ class Livres extends Component {
             {id: 4, titre: "Le Virus d'Asie", auteur: "Tya MILO", pages: 120}
         ]
     };
-    
 
+    handleDeleteLivre = (id) => {
+        const numIndexLivre = this.state.livres.findIndex(el => {
+            return el.id === id
+        });
+
+        const livresCopy = [...this.state.livres];
+        livresCopy.splice(numIndexLivre, 1);
+
+        this.setState({livres: livresCopy});
+
+    }
 
 
     render() {
@@ -27,30 +37,16 @@ class Livres extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                        {/* <td>{this.state.livres[0].titre}</td>
-                        <td>auteur 1</td>
-                        <td>X pages</td>
-                        <td><Button typeBtn="btn-danger" click={() => console.log("updating")}/></td>
-                        <td><Button typeBtn="btn-warning" click={() => console.log("deleted")}/></td> */}
                         {
                             this.state.livres.map((livre) => {
                                 return (
                                     <tr key={livre.id}>
-                                        <td>{livre.titre}</td>
-                                        <td>{livre.auteur}</td>
-                                        <td>{livre.pages}</td>
-                                        <td>
-                                            <Button 
-                                                typeBtn="btn-danger" 
-                                                click={() => console.log("updating")}
-                                            />
-                                        </td>
-                                        <td>
-                                            <Button 
-                                                typeBtn="btn-warning" 
-                                                click={() => console.log("deleted")} 
-                                            />
-                                        </td> 
+                                        <Livre 
+                                            titre={livre.titre} 
+                                            auteur={livre.auteur} 
+                                            pages={livre.pages}
+                                            delete={() => this.handleDeleteLivre(livre.id)} 
+                                        />
                                     </tr>
                                 );
                             })
