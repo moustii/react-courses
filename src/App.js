@@ -5,9 +5,19 @@ import Livres from './containers/Livres/Livres';
 
 class App extends Component {
 
-    handleAdd = () => {
-        console.log("hey");
+    state = {
+        btnActive: false,
     }
+
+    handleAddLivre = () => {
+      
+        this.setState((oldState, props) => {
+            return {
+                btnActive: !oldState.btnActive
+            }
+        });
+    }
+
 
 
     render() {
@@ -16,12 +26,14 @@ class App extends Component {
                 <TitreH1>
                     Page listant les livres
                 </TitreH1>
-                <Livres />
+                <Livres ajoutLivre={this.state.btnActive} />
                 <Button 
                     typeBtn="btn-success" 
                     css="w-100" 
-                    click={() => console.log("adding")}
-                />
+                    click={this.handleAddLivre}
+                >
+                    {!this.state.btnActive? 'Ajouter' : 'Fermer l\'ajout'}
+                </Button>
             </div>
         );
     }

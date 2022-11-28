@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import Livre from "./Livre/Livre";
+import FormAjout from "./FormAJout/FormAjout";
 
 class Livres extends Component {
 
@@ -21,38 +22,46 @@ class Livres extends Component {
         livresCopy.splice(numIndexLivre, 1);
 
         this.setState({livres: livresCopy});
-
     }
 
 
     render() {
+        // const isAjoutTrue = this.props.ajoutLivre;
+
         return (
-            <table className="table text-center">
-                <thead>
-                    <tr className="table-dark">
-                        <th>Titre</th>
-                        <th>Auteur</th>
-                        <th>Nombre de pages</th>
-                        <th colSpan={2}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        {
-                            this.state.livres.map((livre) => {
-                                return (
-                                    <tr key={livre.id}>
-                                        <Livre 
-                                            titre={livre.titre} 
-                                            auteur={livre.auteur} 
-                                            pages={livre.pages}
-                                            delete={() => this.handleDeleteLivre(livre.id)} 
-                                        />
-                                    </tr>
-                                );
-                            })
-                        }
-                </tbody>
-            </table>
+            <>
+                <table className="table text-center">
+                    <thead>
+                        <tr className="table-dark">
+                            <th>Titre</th>
+                            <th>Auteur</th>
+                            <th>Nombre de pages</th>
+                            <th colSpan={2}>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {
+                                this.state.livres.map((livre) => {
+                                    return (
+                                        <tr key={livre.id}>
+                                            <Livre 
+                                                titre={livre.titre} 
+                                                auteur={livre.auteur} 
+                                                pages={livre.pages}
+                                                delete={() => this.handleDeleteLivre(livre.id)} 
+                                            />
+                                        </tr>
+                                    );
+                                })
+                            }
+                    </tbody>
+                </table>
+                {
+                    //isAjoutTrue ? <FormAjout/> : '' 
+                    // si c'est vrai alors (&&) fait ça :
+                    this.props.ajoutLivre && <FormAjout />
+                }
+            </>
         );
     }
 

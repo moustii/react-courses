@@ -11,13 +11,17 @@ const Livre = (props) => {
                 <Button 
                     typeBtn="btn-danger" 
                     click={() => console.log("updating")}
-                />
+                >
+                    Modification
+                </Button>
             </td>
             <td>
                 <Button 
                     typeBtn="btn-warning" 
                     click={props.delete} 
-                />
+                >
+                    Suppression
+                </Button>
             </td> 
         </>
     );
