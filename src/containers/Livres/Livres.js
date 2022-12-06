@@ -10,7 +10,8 @@ class Livres extends Component {
             {id: 2, titre: "La France du 19ème", auteur: "Albert PATRICK", pages: 500},
             {id: 3, titre: "Le monde des animaux", auteur: "Marc MERLIN", pages: 250},
             {id: 4, titre: "Le Virus d'Asie", auteur: "Tya MILO", pages: 120}
-        ]
+        ], 
+        lastId: 4
     };
 
     handleDeleteLivre = (id) => {
@@ -20,8 +21,27 @@ class Livres extends Component {
 
         const livresCopy = [...this.state.livres];
         livresCopy.splice(numIndexLivre, 1);
-
+        
         this.setState({livres: livresCopy});
+    }
+    
+    handleAjoutLivre = (titre, auteur, nbPages) => {
+        // const lastId = (this.state.livres.slice().pop().id);
+        // this.setState({lastId: lastId})
+        const newLivre = {
+            id: this.state.lastId + 1,
+            titre: titre,
+            auteur: auteur,
+            pages: nbPages
+        };
+        const livresCopy = [...this.state.livres];
+        livresCopy.push(newLivre);
+        this.setState(oldState => {
+            return {
+                livres: livresCopy,
+                lastId: oldState.lastId + 1
+            }
+        });
     }
 
 
@@ -59,7 +79,7 @@ class Livres extends Component {
                 {
                     //isAjoutTrue ? <FormAjout/> : '' 
                     // si c'est vrai alors (&&) fait ça :
-                    this.props.ajoutLivre && <FormAjout />
+                    this.props.ajoutLivre && <FormAjout ajoutLivre={this.handleAjoutLivre}/>
                 }
             </>
         );
