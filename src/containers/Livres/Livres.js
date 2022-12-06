@@ -42,6 +42,8 @@ class Livres extends Component {
                 lastId: oldState.lastId + 1
             }
         });
+
+        this.props.fermerAjoutLivre();
     }
 
 

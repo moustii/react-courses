@@ -13,6 +13,12 @@ class FormAjout extends Component {
         // empeche la soumission par défaut du formulaire
         event.preventDefault();
         this.props.ajoutLivre(this.state.titreSaisie, this.state.auteurSaisie, this.state.nbPagesSaisie);
+        this.setState({
+            titreSaisie: "",
+            auteurSaisie: "",
+            nbPagesSaisie: "",
+        });
+        console.log(this.state.btnActive);
     }
 
     render() {
