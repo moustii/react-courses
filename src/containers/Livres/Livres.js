@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import Livre from "./Livre/Livre";
 import FormAjout from "./FormAJout/FormAjout";
+import UpdateLivre from "./UpdateLivre/UpdateLivre";
+import Alert from "../../components/Alert/Alert";
 
 class Livres extends Component {
 
@@ -11,7 +13,12 @@ class Livres extends Component {
             {id: 3, titre: "Le monde des animaux", auteur: "Marc MERLIN", pages: 250},
             {id: 4, titre: "Le Virus d'Asie", auteur: "Tya MILO", pages: 120}
         ], 
-        lastId: 4
+        lastId: 4,
+        idLivreAModifier: 0,
+        alertMsg: {
+            msg: null, 
+            type: null
+        }
     };
 
     handleDeleteLivre = (id) => {
@@ -21,8 +28,13 @@ class Livres extends Component {
 
         const livresCopy = [...this.state.livres];
         livresCopy.splice(numIndexLivre, 1);
-        
-        this.setState({livres: livresCopy});
+        this.setState({
+            livres: livresCopy,
+            alertMsg: {
+                msg: "suppression effectué",
+                type: "alert-danger"
+            }
+        });
     }
     
     handleAjoutLivre = (titre, auteur, nbPages) => {
@@ -39,19 +51,42 @@ class Livres extends Component {
         this.setState(oldState => {
             return {
                 livres: livresCopy,
-                lastId: oldState.lastId + 1
+                lastId: oldState.lastId + 1,
+                alertMsg: {
+                    msg: "ajout effectué",
+                    type: "alert-success"
+                }
             }
         });
-
         this.props.fermerAjoutLivre();
     }
 
+    handleUpdateLivre = (id, titre, auteur, pages) => {
+        // copy des states
+        const numIndexLivre = this.state.livres.findIndex(el => {
+            return el.id === id
+        });       
+        const newLivre = {id,titre,auteur,pages};
+
+        const livresCopy = [...this.state.livres];
+        livresCopy.splice(numIndexLivre, 1, newLivre);
+        console.log(livresCopy);
+        this.setState({
+            livres: livresCopy,
+            idLivreAModifier: 0,
+            alertMsg: {
+                msg: "update effectué",
+                type: "alert-warning"
+            }
+        });
+    }
 
     render() {
-        // const isAjoutTrue = this.props.ajoutLivre;
-
         return (
-            <>
+            <>  
+                {
+                    this.state.alertMsg && <Alert type={this.state.alertMsg.type}>{this.state.alertMsg.msg}</Alert>
+                }
                 <table className="table text-center">
                     <thead>
                         <tr className="table-dark">
@@ -64,16 +99,31 @@ class Livres extends Component {
                     <tbody>
                             {
                                 this.state.livres.map((livre) => {
-                                    return (
-                                        <tr key={livre.id}>
-                                            <Livre 
-                                                titre={livre.titre} 
-                                                auteur={livre.auteur} 
-                                                pages={livre.pages}
-                                                delete={() => this.handleDeleteLivre(livre.id)} 
-                                            />
-                                        </tr>
-                                    );
+                                    if (livre.id !== this.state.idLivreAModifier) {
+                                        return (
+                                            <tr key={livre.id}>
+                                                    <Livre 
+                                                        titre={livre.titre} 
+                                                        auteur={livre.auteur} 
+                                                        pages={livre.pages}
+                                                        delete={() => this.handleDeleteLivre(livre.id)} 
+                                                        update={() => this.setState({idLivreAModifier: livre.id})}
+                                                    />
+                                            </tr>
+                                        );
+                                    } else {
+                                        return (
+                                            <tr key={livre.id}>
+                                                <UpdateLivre
+                                                    id={livre.id}
+                                                    titre={livre.titre} 
+                                                    auteur={livre.auteur} 
+                                                    pages={livre.pages}
+                                                    updateLivre={this.handleUpdateLivre}
+                                                />
+                                            </tr>
+                                        )
+                                    }
                                 })
                             }
                     </tbody>

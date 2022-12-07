@@ -24,7 +24,12 @@ class App extends Component {
                 <TitreH1>
                     Page listant les livres
                 </TitreH1>
-                <Livres ajoutLivre={this.state.btnActive} fermerAjoutLivre={() => this.setState({btnActive:false})} />
+                
+
+                <Livres 
+                    ajoutLivre={this.state.btnActive} 
+                    fermerAjoutLivre={() => this.setState({btnActive:false})} 
+                />
                 <Button 
                     typeBtn="btn-success" 
                     css="w-100" 
@@ -36,9 +41,6 @@ class App extends Component {
         );
     }
 }
-
-
-
 
 
 export default App;
