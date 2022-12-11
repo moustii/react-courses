@@ -1,25 +1,20 @@
 import React, {Component} from 'react';
 import Button from '../../../components/Button/Button';
+import {withFormik} from 'formik';
 
 class FormAjout extends Component {
 
-    state = {
-        titreSaisie: "",
-        auteurSaisie: "",
-        nbPagesSaisie: "",
-    }
-
-    handleValidationForm = (event) => {
-        // empeche la soumission par défaut du formulaire
-        event.preventDefault();
-        this.props.ajoutLivre(this.state.titreSaisie, this.state.auteurSaisie, this.state.nbPagesSaisie);
-        this.setState({
-            titreSaisie: "",
-            auteurSaisie: "",
-            nbPagesSaisie: "",
-        });
-        console.log(this.state.btnActive);
-    }
+    // handleValidationForm = (event) => {
+    //     // empeche la soumission par défaut du formulaire
+    //     event.preventDefault();
+    //     this.props.ajoutLivre(this.state.titreSaisie, this.state.auteurSaisie, this.state.nbPagesSaisie);
+    //     this.setState({
+    //         titreSaisie: "",
+    //         auteurSaisie: "",
+    //         nbPagesSaisie: "",
+    //     });
+    //     console.log(this.state.btnActive);
+    // }
 
     render() {
         return (
@@ -32,9 +27,15 @@ class FormAjout extends Component {
                             type="text" 
                             className="form-control" 
                             id="titre"
-                            value={this.state.titreSaisie}
-                            onChange={(event) => this.setState({titreSaisie: event.target.value})}    
+                            name="titre"
+                            value={this.props.values.titre}
+                            onChange={this.props.handleChange}  
+                            onBlur={this.props.handleBlur}  
                         />
+                        {
+                            (this.props.touched.titre && this.props.errors.titre) && 
+                            <span style={{color:"red"}}>{this.props.errors.titre}</span>
+                        }
                     </div>
                     <div className="mb-3">
                         <label htmlFor="auteur" className="form-label">Auteur</label>
@@ -42,26 +43,61 @@ class FormAjout extends Component {
                             type="text" 
                             className="form-control" 
                             id="auteur" 
-                            value={this.state.auteurSaisie}
-                            onChange={(event) => this.setState({auteurSaisie: event.target.value})}    
+                            name="auteur"
+                            value={this.props.values.auteur}
+                            onChange={this.props.handleChange}   
+                            onBlur={this.props.handleBlur} 
                         />
+                        {
+                            (this.props.touched.auteur && this.props.errors.auteur) && 
+                            <span style={{color:"red"}}>{this.props.errors.auteur}</span>
+                        }
                     </div>
                     <div className="mb-3">
                         <label htmlFor="nbPages" className="form-label">Nombre de pages</label>
                         <input 
                             type="number" 
                             className="form-control" 
-                            id="nbPages" 
-                            value={this.state.nbPagesSaisie}
-                            onChange={(event) => this.setState({nbPagesSaisie: event.target.value})}
+                            id="nbPages"
+                            name="nbPages" 
+                            value={this.props.values.nbPages}
+                            onChange={this.props.handleChange}
+                            onBlur={this.props.handleBlur}
                         />
+                        {
+                            (this.props.touched.nbPages && this.props.errors.nbPages) && 
+                            <span style={{color:"red"}}>{this.props.errors.nbPages}</span>
+                        }
                     </div>
               
-                    <Button typeBtn="btn-primary" click={this.handleValidationForm}>Valider</Button> 
+                    <Button typeBtn="btn-primary" click={this.props.handleSubmit}>Valider</Button> 
                 </form>
             </>
         )
     }
 }
 
-export default FormAjout;
+export default withFormik({
+    // lier les inputs aux props de formik (name input) (remplace les states)
+    mapPropsToValues: () => ({
+        titre: "",
+        auteur: "",
+        nbPages: ""
+    }), 
+    validate: value => {
+        const errors = {};
+        if (value.titre.length < 3) {
+            errors.titre = "Le titre doit supérieur à 3 caracteres";
+        }
+        if (value.titre.length > 15) {
+            errors.titre = "Le titre doit inferieur à 15 caracteres";
+        }
+        if (!value.auteur) {
+            errors.auteur = "Le champ est obligatoire";
+        }
+        return errors;
+    }, 
+    handleSubmit: (value, {props}) => {
+        props.ajoutLivre(value.titre, value.auteur, value.nbPages);
+    } 
+})(FormAjout);
