@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Button from '../../../components/Button/Button';
 import {withFormik} from 'formik';
+import * as Yup from 'yup';
 
 class FormAjout extends Component {
 
@@ -61,7 +62,7 @@ class FormAjout extends Component {
                             id="nbPages"
                             name="nbPages" 
                             value={this.props.values.nbPages}
-                            onChange={this.props.handleChange}
+                            onChange={(event) => this.props.setFieldValue('nbPages', parseInt(event.target.value))}
                             onBlur={this.props.handleBlur}
                         />
                         {
@@ -83,20 +84,33 @@ export default withFormik({
         titre: "",
         auteur: "",
         nbPages: ""
-    }), 
-    validate: value => {
-        const errors = {};
-        if (value.titre.length < 3) {
-            errors.titre = "Le titre doit supérieur à 3 caracteres";
-        }
-        if (value.titre.length > 15) {
-            errors.titre = "Le titre doit inferieur à 15 caracteres";
-        }
-        if (!value.auteur) {
-            errors.auteur = "Le champ est obligatoire";
-        }
-        return errors;
-    }, 
+    }),
+    validationSchema: Yup.object().shape({
+        titre: Yup.string()
+                    .min(3, 'au moins 3 caracteres')
+                    .max(15, 'moins de 15 caracteres')
+                    .required('champ obligatoire'),
+        auteur: Yup.string()
+                    .min(3, 'au moins 3 caracteres')
+                    .required('champ obligatoire'),
+        nbPages: Yup.number()
+                    .lessThan(1200, 'moins de 1200')
+                    .moreThan(50, 'plus de 50')
+                    .required('champ obligatoire')
+    }),
+    // validate: value => {
+    //     const errors = {};
+    //     if (value.titre.length < 3) {
+    //         errors.titre = "Le titre doit supérieur à 3 caracteres";
+    //     }
+    //     if (value.titre.length > 15) {
+    //         errors.titre = "Le titre doit inferieur à 15 caracteres";
+    //     }
+    //     if (!value.auteur) {
+    //         errors.auteur = "Le champ est obligatoire";
+    //     }
+    //     return errors;
+    // }, 
     handleSubmit: (value, {props}) => {
         props.ajoutLivre(value.titre, value.auteur, value.nbPages);
     } 
